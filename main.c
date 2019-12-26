@@ -1,36 +1,21 @@
 #include "grps.h"
 
-
-lst				*create_maillon(void)
+int	check_repete(lst *a, float x, int i)
 {
-	lst			*args;
+	int j;
 
-	if (!(args = (lst *)malloc(sizeof(lst))))
-		return (NULL);
-	args->next = NULL;
-	return (args);
+	j = i;
+	while (a && j)
+	{
+		if (a->n == x)
+			return (1);
+		a = a->next;
+		j--;
+	}
+	return (0);
 }
 
-
-void		ft_alloc(lst **grp, lst **curr, lst **tt)
-{
-	if ((*grp) == NULL)
-	{
-		(*grp) = create_maillon();
-		(*tt) = (*grp);
-		(*grp)->n = (*curr)->n;
-	}
-	else
-	{
-		(*grp)->next = create_maillon();
-		(*grp)->next->n = (*curr)->n;
-		(*grp) = (*grp)->next;
-	}
-}
-
-
-
-group *remplir_ensemble(float *a, char name)
+group	*remplir_ensemble(float *a, int size, char name)
 {
 	group *grpA;
 	lst *curr = NULL;
@@ -39,23 +24,29 @@ group *remplir_ensemble(float *a, char name)
 
 	grpA = (group *)malloc(sizeof(group));
 	curr = create_maillon();
-	while (i < 10)
+	while (i < size)
 	{
 		curr->n = a[i];
-		ft_alloc(&grpA->lst, &curr, &tt);
-		i++;	
+		if (i && (check_repete(tt, a[i], i) == 1))
+			i++;
+		else
+		{
+			ft_alloc(&grpA->lst, &curr, &tt);
+			i++;	
+		}
 	}
 	free(curr);
 	grpA->lst = tt;
-//	printf("LLLL %f lll\n",grpA->lst->n);
 	grpA->name = name;
 	return (grpA);
 }
 
-int		cardinal(lst *g)
+int		cardinal(lst *e)
 {
 	int card = 0;
+	lst	*g = NULL;
 
+	g = e;
 	while (g != NULL)
 	{
 		card++;
@@ -63,13 +54,21 @@ int		cardinal(lst *g)
 	}
 	return (card);
 }
+
 void	afficher_group(group *grp)
 {
-	int i = 0;
-	printf("%c = {", grp->name);
-	while (grp->lst != NULL)
+	int 	i = 0;
+	lst		*l = NULL;
+	if (grp->card == 0)
 	{
-		printf("%.2f",grp->lst->n);
+		printf("L'ensemble %c est vide.\n", grp->name);
+		return;
+	}
+	printf("%c = {", grp->name);
+	l = grp->lst;
+	while (l != NULL)
+	{
+		printf("%.2f",l->n);
 		if (i == grp->card - 1)
 		{
 			printf("}");
@@ -77,21 +76,28 @@ void	afficher_group(group *grp)
 		}
 		else
 			printf(", ");
-		grp->lst = grp->lst->next;
+		l = l->next;
 		i++;
 	}
+	printf("------------------------------\n");
 }
+
 int main()
 {
-	float a[10] = {-20, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-	float	b[12] = {-9, -8, 0, 10, 20 , 3, 40, 55, 60, 70, 80, 9};
-	group *A;
+	float	a[10] = {-20, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+//	float	b[10] = {-20, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+	float	b[12] = {-9, -8, 0, 10, 0 , 3, 40, 55, 60, 70, 80, 9};
+	group	*A;
 	group	*B;
 
-	A = remplir_ensemble(a, 'A');
-	B = remplir_ensemble(b, 'B');
+	A = remplir_ensemble(a, 10,'A');
+	B = remplir_ensemble(b, 12,'B');
 	A->card = cardinal(A->lst);
 	B->card = cardinal(B->lst);
 	afficher_group(A);
 	afficher_group(B);
+	trouver_intersection(A, B);
+	trouver_union(A, B);
+//	trouver_element(1, A);
+	verifier_egalite(A, B);
 }

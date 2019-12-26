@@ -1,0 +1,15 @@
+Dans un référentiel U, la différence des ensembles A et B est l’ensemble des éléments de A qui n’appartiennent pas à B.
+
+Dans un référentiel U, la différence symétrique des ensembles A et B est l’ensemble des éléments appartenant soit à A, soit à B, mais pas aux deux ensembles à la fois. (DELTA)
+
+Dans un référentiel U, le complémentaire de l’ensemble E est l’ensemble des éléments de U qui n’appartiennent pas à l’ensemble E.
+
+ENSEMBLES DISJOINTS: Paire d’ensembles qui n’ont aucun élément en commun.
+
+****************** Inclusion **************************
+Le symbole « ⊆ » se lit : « … est inclus dans … » ou « … est un sous-ensemble de … ».
+Si on a A ⊆ B, cela signifie que tous les éléments de A sont dans B ou que A est égal à B.
+Le symbole « ⊂ » se lit : « … est strictement inclus dans … » ou « … est un sous-ensemble strict de … ».
+Si on a A ⊂ B, cela signifie que tous les éléments de A sont dans B mais qu’au moins un élément de A n’est pas dans B.
+
+
