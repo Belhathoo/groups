@@ -60,6 +60,7 @@ void    trouver_intersection(group *A, group *B)
 	I->card = cardinal(I->lst);
     printf("*** L'intersection de %c et %c :\n",A->name, B->name);
 	afficher_group(I);
+	B->next = I;
 }
 
 void	trouver_union(group *A, group *B)
@@ -86,7 +87,7 @@ void	trouver_union(group *A, group *B)
 	while (b)
 	{
 		curr->n = b->n;
-		if (i && (check_repete(tt, curr->n, i) == 1))
+		if ((check_repete(tt, curr->n, i) == 1))
 		{
 			i++;
 			b = b->next;
@@ -102,8 +103,9 @@ void	trouver_union(group *A, group *B)
     U->lst = tt;
 	U->name = 'U';
 	U->card = cardinal(U->lst);
-    printf("*** L'Union de %c et %c :\n",A->name, B->name);
+    printf("*** L'Union de %c et %c :\nA U B = ",A->name, B->name);
 	afficher_group(U);
+	B->next->next = U;
 	
 }
 

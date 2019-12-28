@@ -5,7 +5,7 @@ int	check_repete(lst *a, float x, int i)
 	int j;
 
 	j = i;
-	while (a && j)
+	while (a && j >= 0)
 	{
 		if (a->n == x)
 			return (1);
@@ -27,10 +27,11 @@ group	*remplir_ensemble(float *a, int size, char name)
 	while (i < size)
 	{
 		curr->n = a[i];
-		if (i && (check_repete(tt, a[i], i) == 1))
+		if ((check_repete(tt, a[i], i) == 1))
 			i++;
 		else
 		{
+			printf("LMLM %.2f\n", curr->n);
 			ft_alloc(&grpA->lst, &curr, &tt);
 			i++;	
 		}
@@ -38,6 +39,7 @@ group	*remplir_ensemble(float *a, int size, char name)
 	free(curr);
 	grpA->lst = tt;
 	grpA->name = name;
+	grpA->next = NULL;
 	return (grpA);
 }
 
@@ -61,7 +63,7 @@ void	afficher_group(group *grp)
 	lst		*l = NULL;
 	if (grp->card == 0)
 	{
-		printf("L'ensemble %c est vide.\n", grp->name);
+		printf("L'ensemble '%c' est vide.\n", grp->name);
 		return;
 	}
 	printf("%c = {", grp->name);
@@ -82,22 +84,73 @@ void	afficher_group(group *grp)
 	printf("------------------------------\n");
 }
 
+int	menu(void)
+{
+	char choix = '9';
+
+	while((choix != 'x' && choix != 'X' && choix != 'm') && (choix < '1' || choix > '7'))
+	{
+		printf("\n******************** MENU ********************\n\n");
+		printf(" 1- Afficher Les Ensembles Disponibles:\n");
+		printf(" 2- Creer Un Ensemble:\n");
+		printf(" 3- Calculer L'Intersection De Deux Ensembles:\n");
+		printf(" 4- Calculer L'Union De Deux Ensembles:\n");
+		printf(" 5- Difference & Difference Symetrique:\n");
+		printf(" 6- Tester L'appartenance d'Un Element à Un Ensemble\n");
+		printf(" 7- Comparer Deux Ensemblles:\n"); /* = C Disjoint*/
+
+		printf("    Appuyer sur 'X'/'x' pour quitter.\n\tVotre choix: ");
+		scanf("%c", &choix);
+		printf("\n");
+		if ((choix != 'x' && choix != 'X' && choix == 'm') && (choix < '1' || choix > '7'))
+			printf("\n!!CHOIX INVALIDE!!");
+	}
+	return (choix);
+}
+
+
+group	*trouver_dernier_maillon(group *a)
+{
+	group *tmp;
+	group *tt;
+	tt = a;
+	while(a->next)
+	{
+		a = a->next;
+	}
+	tmp = a;
+	a = tt;
+	return (tmp);
+}
+
 int main()
 {
-	float	a[10] = {-20, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-//	float	b[10] = {-20, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-	float	b[12] = {-9, -8, 0, 10, 0 , 3, 40, 55, 60, 70, 80, 9};
-	group	*A;
-	group	*B;
+	char	choix = 'm';
 
-	A = remplir_ensemble(a, 10,'A');
-	B = remplir_ensemble(b, 12,'B');
-	A->card = cardinal(A->lst);
-	B->card = cardinal(B->lst);
-	afficher_group(A);
-	afficher_group(B);
-	trouver_intersection(A, B);
-	trouver_union(A, B);
-//	trouver_element(1, A);
-	verifier_egalite(A, B);
+	group	*A;
+
+	A = affect_premiers_groups();	
+	//choix = menu();
+	while(1)
+	{
+		if (choix == '1')
+			afficher_tout(&A);
+		if (choix == '2')
+			creer_ensemble(&A);
+		if (choix == 'x')
+			return (0);
+		if (choix == 'X')
+			return (0);
+	//	if (choix == 'm')
+		else
+			choix = menu();
+	//	choix = 'm';
+	}
+
+//	trouver_intersection(A, A->next);
+//	trouver_union(A, A->next);
+	
+//	afficher_group(A->next->next);
+	//	trouver_element(1, A);
+//	verifier_egalite(A, A->next);
 }
