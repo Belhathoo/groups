@@ -27,15 +27,14 @@ void		ft_alloc(lst **grp, lst **curr, lst **tt)
 	}
 }
 
-void    trouver_intersection(group *A, group *B)
+group	*trouver_intersection(group *A, group *B)
 {
 	group	*I;
 
 	lst		*curr = NULL;
 	lst		*tt = NULL;
-
-    lst   *a;
-    lst   *b;
+    lst   	*a;
+    lst   	*b;
 
     a = A->lst;    
 	I = (group *)malloc(sizeof(group));
@@ -58,12 +57,10 @@ void    trouver_intersection(group *A, group *B)
     I->lst = tt;
 	I->name = 'I';
 	I->card = cardinal(I->lst);
-    printf("*** L'intersection de %c et %c :\n",A->name, B->name);
-	afficher_group(I);
-	B->next = I;
+	return (I);
 }
 
-void	trouver_union(group *A, group *B)
+group	*trouver_union(group *A, group *B)
 {
 	group	*U;
 
@@ -103,10 +100,7 @@ void	trouver_union(group *A, group *B)
     U->lst = tt;
 	U->name = 'U';
 	U->card = cardinal(U->lst);
-    printf("*** L'Union de %c et %c :\nA U B = ",A->name, B->name);
-	afficher_group(U);
-	B->next->next = U;
-	
+	return (U);	
 }
 
 void trouver_element(float x, group *E)
@@ -129,13 +123,23 @@ int		verifier_inclusion(group *A, group *B)
 {
 	lst	*a;
 	lst	*b;
-	int check = 0;
+	int check = 2;
 
 	a = A->lst;
 	b = B->lst;
+	if (A->card == 0)
+	{
+		check = 1;
+		return (check);
+	}
+	if (B->card == 0)
+	{
+		check = 1;
+		return (check);
+	}
 	while (a)
 	{
-		while (b && !check)
+		while (b && check)
 		{
 			if (a->n == b->n)
 			{
@@ -143,38 +147,38 @@ int		verifier_inclusion(group *A, group *B)
 				check = 1;
 			}
 			else
+			{
+				check = 0;
 				b = b->next;
+			}
 		}
 		a = a->next;
 	}
-	if (check)
-		return (1);
-	else
-		return (0);
+	return (check);
 }
+
 int		verifier_egalite(group *A, group *B)
 {
 	int check;
 	
 	check = verifier_inclusion(A, B);
-	if (check)
+	if (check == 1)
 	{
 		if (A->card == B->card)
-		{
 			printf("%c = %c\n", A->name, B->name);
-			return (1);
-		}
-		else
-		{
+		else if(A->card < B->card)
 			printf("%c c %c\n", A->name, B->name);
-			return (2);
-		}
+		else
+			printf("%c c %c\n", B->name, A->name);		
+		check = 1;
 	}
 	else
 	{
-		printf("%c est different du %c\n",A->name, B->name);
+		if (trouver_intersection(A, B)->card == 0)
+			printf("%c et %c sont Disjoints!\n",A->name, B->name);
+		else
+			printf("%c est different du %c\n",A->name, B->name);
 		return (0);
 	}
-	
-	
+	return (1);
 }

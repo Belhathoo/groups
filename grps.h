@@ -1,5 +1,8 @@
+
+
 # include <stdio.h>
 # include <stdlib.h>
+# include <unistd.h>
 
 typedef struct lst
 {
@@ -33,8 +36,8 @@ int		cardinal(lst *e);
 
 int     check_repete(lst *tt, float x, int i);
 
-void    trouver_intersection(group *A, group *B);
-void    trouver_union(group *A, group *B);
+group    *trouver_intersection(group *A, group *B);
+group    *trouver_union(group *A, group *B);
 void    trouver_element(float x, group *E);
 int     verifier_egalite(group *A, group *B);
 int     verifier_inclusion(group *A, group *B);
@@ -43,4 +46,8 @@ void    afficher_group(group *E);
 
 
 void    afficher_tout(group **A);
-void     creer_ensemble(group **A);
+void    creer_ensemble(group **A);
+void    creer_intersection(group **A);
+void    creer_union(group **A);
+void    test_appartenance(group **A);
+void    comparer_ensembles(group **A);

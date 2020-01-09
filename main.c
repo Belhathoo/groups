@@ -31,7 +31,6 @@ group	*remplir_ensemble(float *a, int size, char name)
 			i++;
 		else
 		{
-			printf("LMLM %.2f\n", curr->n);
 			ft_alloc(&grpA->lst, &curr, &tt);
 			i++;	
 		}
@@ -87,8 +86,10 @@ void	afficher_group(group *grp)
 int	menu(void)
 {
 	char choix = '9';
+	  char    buff;
+    int     nb;
 
-	while((choix != 'x' && choix != 'X' && choix != 'm') && (choix < '1' || choix > '7'))
+	while((choix != 'x' && choix != 'X') && (choix < '1' || choix > '8'))
 	{
 		printf("\n******************** MENU ********************\n\n");
 		printf(" 1- Afficher Les Ensembles Disponibles:\n");
@@ -98,12 +99,14 @@ int	menu(void)
 		printf(" 5- Difference & Difference Symetrique:\n");
 		printf(" 6- Tester L'appartenance d'Un Element à Un Ensemble\n");
 		printf(" 7- Comparer Deux Ensemblles:\n"); /* = C Disjoint*/
+		printf(" 8- Supprimer Tout Les Ensembles\n");
 
-		printf("    Appuyer sur 'X'/'x' pour quitter.\n\tVotre choix: ");
-		scanf("%c", &choix);
+		printf("    Appuyer sur 'X'/'x' pour quitter.\n\tVotre choix:\n");
+	    while((nb = read(0, &buff, 1)) && buff != '\n')
+        	choix = buff;
 		printf("\n");
-		if ((choix != 'x' && choix != 'X' && choix == 'm') && (choix < '1' || choix > '7'))
-			printf("\n!!CHOIX INVALIDE!!");
+		if ((choix != 'x' && choix != 'X') && (choix < '1' || choix > '8'))
+			printf("\n\t\t!!CHOIX INVALIDE!!");
 	}
 	return (choix);
 }
@@ -125,26 +128,30 @@ group	*trouver_dernier_maillon(group *a)
 
 int main()
 {
-	char	choix = 'm';
+	char	choix = '1';
 
 	group	*A;
 
 	A = affect_premiers_groups();	
-	//choix = menu();
 	while(1)
 	{
+		choix = menu();
 		if (choix == '1')
 			afficher_tout(&A);
 		if (choix == '2')
 			creer_ensemble(&A);
+		if (choix == '3')
+			creer_intersection(&A);
+		if (choix == '4')
+			creer_union(&A);
+		if (choix == '6')
+			test_appartenance(&A);
+		if (choix == '7')
+			comparer_ensembles(&A);
 		if (choix == 'x')
 			return (0);
 		if (choix == 'X')
 			return (0);
-	//	if (choix == 'm')
-		else
-			choix = menu();
-	//	choix = 'm';
 	}
 
 //	trouver_intersection(A, A->next);
